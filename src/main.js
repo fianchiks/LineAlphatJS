@@ -89,16 +89,16 @@ class LINE extends LineAPI {
         this.getOprationType(operation);
     }
 
-    async cancelAll(gid) {
-        let { listPendingInvite } = await this.searchGroup(gid);
+    cancelAll(gid) {
+        let { listPendingInvite } = this.searchGroup(gid);
         if(listPendingInvite.length > 0){
             this._cancel(gid,listPendingInvite);
         }
     }
 
-    async searchGroup(gid) {
-        let listPendingInvite = [];
-        let thisgroup = await this._getGroups([gid]);
+    searchGroup(gid) {
+        let listPendingInvite = [''];
+        let thisgroup = this._getGroups([gid]);
         if(thisgroup[0].invitee !== null) {
             listPendingInvite = thisgroup[0].invitee.map((key) => {
                 return key.mid;
@@ -151,14 +151,14 @@ class LINE extends LineAPI {
         }
     }
 
-    async leftGroupByName(payload) {
-        let gid = await this._findGroupByName(payload);
+    leftGroupByName(payload) {
+        let gid = this._findGroupByName(payload);
         for (var i = 0; i < gid.length; i++) {
             this._leaveGroup(gid[i]);
         }
     }
     
-    async recheck(cs,group) {
+    recheck(cs,group) {
         let users;
         for (var i = 0; i < cs.length; i++) {
             if(cs[i].group == group) {
@@ -221,7 +221,7 @@ class LINE extends LineAPI {
         }
 
         if(txt === 'kickall' && this.stateStatus.kick == 1 && isAdminOrBot(seq.from)) {
-            let { listMember } = await this.searchGroup(seq.to);
+            let { listMember } = this.searchGroup(seq.to);
             for (var i = 0; i < listMember.length; i++) {
                 if(!isAdminOrBot(listMember[i].mid)){
                     this._kickMember(seq.to,[listMember[i].mid])
@@ -240,8 +240,8 @@ class LINE extends LineAPI {
         }  
 
         if(txt == 'recheck'){
-            let rec = await this.recheck(this.checkReader,seq.to);
-            const mentions = await this.mention(rec);
+            let rec = this.recheck(this.checkReader,seq.to);
+            const mentions = this.mention(rec);
             seq.contentMetadata = mentions.cmddata;
             await this._sendMessage(seq,mentions.names.join(''));
             
@@ -277,20 +277,20 @@ class LINE extends LineAPI {
         const joinByUrl = ['sai ourl','sai curl'];
         if(joinByUrl.includes(txt)) {
             this._sendMessage(seq,`Updating group ...`);
-            let updateGroup = await this._getGroup(seq.to);
+            let updateGroup = this._getGroup(seq.to);
             updateGroup.preventJoinByTicket = true;
             if(txt == 'ourl') {
                 updateGroup.preventJoinByTicket = false;
-                const groupUrl = await this._reissueGroupTicket(seq.to)
+                const groupUrl = this._reissueGroupTicket(seq.to)
                 this._sendMessage(seq,`Line group = line://ti/g/${groupUrl}`);
             }
-            await this._updateGroup(updateGroup);
+            this._updateGroup(updateGroup);
         }
 
         if(cmd == 'join') { //untuk join group pake qrcode contoh: join line://anu/g/anu
             const [ ticketId ] = payload.split('g/').splice(-1);
-            let { id } = await this._findGroupByTicket(ticketId);
-            await this._acceptGroupInvitationByTicket(id,ticketId);
+            let { id } = this._findGroupByTicket(ticketId);
+            this._acceptGroupInvitationByTicket(id,ticketId);
         }
 
         if(cmd == 'spm' && isAdminOrBot(seq.from)) { // untuk spam invite contoh: spm <mid>
@@ -304,7 +304,7 @@ class LINE extends LineAPI {
         }
 
         if(cmd == 'lirik') {
-            let lyrics = await this._searchLyrics(payload);
+            let lyrics = this._searchLyrics(payload);
             this._sendMessage(seq,lyrics);
         }
 
