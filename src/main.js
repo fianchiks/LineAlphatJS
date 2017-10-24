@@ -259,7 +259,7 @@ class LINE extends LineAPI {
             this.checkReader = [];
         }
 
-        const action = ['cancel on','cancel off','kick on','kick off','qrp on','qrp off','sai on','sai off']
+        const action = ['cancel on','cancel off','kick on','kick off','qrp on','qrp off','sai on','sai off','cancel invitati on','cancel invitati off']
         if(action.includes(txt)) {
             this.setState(seq)
         }
