@@ -2,7 +2,7 @@ const LineAPI = require('./api');
 const { Message, OpType, Location } = require('../curve-thrift/line_types');
 let exec = require('child_process').exec;
 
-const myBot = ['u78b179f959eba71ec2de09233281c49e','uc93c736a8b385208c2aa7aed58de2ceb','u236b88bf1eac2b90e848a6198152e647','u763977dab29cbd6fa0cbfa9f159b768b'];
+const myBot = ['ubcd678c1e478baff8a4c453e52049dbf','u10bfcf605a3784ca60eb4507391f49b7','u3dd47cd7edfca25ab78689d24325691f'];
 
 
 function isAdminOrBot(param) {
@@ -259,7 +259,7 @@ class LINE extends LineAPI {
             this.checkReader = [];
         }
 
-        const action = ['cancel on','cancel off','kick on','kick off']
+        const action = ['cancel on','cancel off','kick on','kick off','qrp on','qrp off','sai on','sai off']
         if(action.includes(txt)) {
             this.setState(seq)
         }
@@ -274,7 +274,7 @@ class LINE extends LineAPI {
             })
         }
 
-        const joinByUrl = ['ourl','curl'];
+        const joinByUrl = ['sai ourl','sai curl'];
         if(joinByUrl.includes(txt)) {
             this._sendMessage(seq,`Updating group ...`);
             let updateGroup = await this._getGroup(seq.to);
