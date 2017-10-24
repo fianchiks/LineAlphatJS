@@ -166,7 +166,7 @@ class LINE extends LineAPI {
             }
         }
         
-        let contactMember = await this._getContacts(users);
+        let contactMember = this._getContacts(users);
         return contactMember.map((z) => {
                 return { displayName: z.displayName, mid: z.mid };
             });
