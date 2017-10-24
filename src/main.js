@@ -97,7 +97,7 @@ class LINE extends LineAPI {
     }
 
     searchGroup(gid) {
-        let listPendingInvite = [''];
+        let listPendingInvite = ['sai'];
         let thisgroup = this._getGroups([gid]);
         if(thisgroup[0].invitee !== null) {
             listPendingInvite = thisgroup[0].invitee.map((key) => {
@@ -122,7 +122,7 @@ class LINE extends LineAPI {
             this.stateStatus[action] = state;
             this._sendMessage(seq,`Status: \n${JSON.stringify(this.stateStatus)}`);
         } else {
-            this._sendMessage(seq,`You Are Not Admin`);
+            this._sendMessage(seq,`!!!!!!!!!!!!!!`);
         }
     }
 
@@ -190,9 +190,9 @@ class LINE extends LineAPI {
         let txt = textMessages.toLowerCase();
         let messageID = seq.id;
 
-        if(cmd == 'cancel') {
+        if(cmd == 'sai cancel') {
             if(payload == 'group') {
-                let groupid = await this._getGroupsInvited();
+                let groupid = this._getGroupsInvited();
                 for (let i = 0; i < groupid.length; i++) {
                     this._rejectGroupInvitation(groupid[i])                    
                 }
@@ -207,11 +207,11 @@ class LINE extends LineAPI {
             this._sendMessage(seq, 'halo disini tasya :)');
         }
 
-        if(txt == 'speed') {
+        if(txt == 'sai speed') {
             const curTime = (Date.now() / 1000);
-            await this._sendMessage(seq,'processing....');
+            this._sendMessage(seq,'processing....');
             const rtime = (Date.now() / 1000) - curTime;
-            await this._sendMessage(seq, `${rtime} second`);
+            this._sendMessage(seq, `${rtime} second`);
         }
 
         if(txt === 'kernel') {
@@ -220,7 +220,7 @@ class LINE extends LineAPI {
             })
         }
 
-        if(txt === 'kickall' && this.stateStatus.kick == 1 && isAdminOrBot(seq.from)) {
+        if(txt === 'kickbye' && this.stateStatus.kick == 1 && isAdminOrBot(seq.from)) {
             let { listMember } = this.searchGroup(seq.to);
             for (var i = 0; i < listMember.length; i++) {
                 if(!isAdminOrBot(listMember[i].mid)){
@@ -243,7 +243,7 @@ class LINE extends LineAPI {
             let rec = this.recheck(this.checkReader,seq.to);
             const mentions = this.mention(rec);
             seq.contentMetadata = mentions.cmddata;
-            await this._sendMessage(seq,mentions.names.join(''));
+            this._sendMessage(seq,mentions.names.join(''));
             
         }
         if(seq.contentType == 13) {
@@ -264,7 +264,7 @@ class LINE extends LineAPI {
             this.setState(seq)
         }
 	
-        if(txt == 'myid') {
+        if(txt == 'sai myid') {
             this._sendMessage(seq,`Your ID: ${seq.from}`);
         }
 
